@@ -1,5 +1,14 @@
 # CoPasTa
 
+[Русский](#русский) · [English](#english)
+
+**Скачать готовый EXE:** [последний релиз](https://github.com/yanchernyavsky/CoPasTa/releases/latest)  
+**Download the EXE:** [latest release](https://github.com/yanchernyavsky/CoPasTa/releases/latest)
+
+---
+
+## Русский
+
 Небольшое трей-приложение для Windows:
 
 - **выделил текст мышью и отпустил кнопку** — выделенный текст один раз копируется в буфер;
@@ -7,7 +16,7 @@
 
 Реализация написана с нуля, без сторонних библиотек.
 
-## Поведение
+### Поведение
 
 - Копирование происходит **только в конце выделения**, по отпусканию левой кнопки мыши.
   Простое нажатие/клик и выделение с клавиатуры буфер не трогают; во время протягивания
@@ -25,7 +34,7 @@
 - Вся тяжёлая работа (UI Automation, буфер, `SendKeys`) выполняется в отдельном STA-потоке,
   поэтому потягивание мышью и отпускание кнопки не подтормаживают.
 
-## Меню в трее
+### Меню в трее
 
 - **Включено / Отключено** — также переключается двойным щелчком по иконке;
 - **Пауза** — 1, 5 или 15 минут, остаток времени виден в подсказке иконки;
@@ -40,7 +49,7 @@
 
 Приложение не показывает окон, ничего не отправляет в сеть и не хранит историю.
 
-## Сборка
+### Сборка
 
 Нужен [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0).
 
@@ -61,12 +70,12 @@ dotnet publish .\CoPasTa.csproj -c Release -r win-x64 --self-contained false `
 > Для framework-dependent сборки на целевом ПК нужен **.NET 8 Desktop Runtime**.
 > Для полностью автономного `.exe` замените `--self-contained false` на `--self-contained true`.
 
-## Удаление автозагрузки
+### Удаление автозагрузки
 
 Снимите галочку в меню трее или удалите параметр `CoPasTa` из
 `HKCU\Software\Microsoft\Windows\CurrentVersion\Run`.
 
-## Файлы
+### Файлы
 
 | Файл | Назначение |
 | --- | --- |
@@ -82,7 +91,97 @@ dotnet publish .\CoPasTa.csproj -c Release -r win-x64 --self-contained false `
 | `build.ps1` | Сборка one-file exe |
 | `LICENSE` | Лицензия MIT © 2026 Yan Chernyavsky |
 
-## Лицензия
+### Лицензия
 
 [MIT](LICENSE) — можно использовать, изменять и распространять, в том числе в коммерческих
 проектах, при сохранении уведомления об авторстве.
+
+---
+
+## English
+
+A tiny Windows tray utility:
+
+- **select text with the mouse and release the button** — the selection is copied to the clipboard once;
+- **double-click in a text field** — pastes text from the clipboard (copied by the app or manually).
+
+Written from scratch, with no third-party libraries.
+
+### Behavior
+
+- Copying happens **only at the end of a selection**, when the left mouse button is released.
+  A simple click and keyboard selection never touch the clipboard; the clipboard is also unchanged
+  while you are dragging.
+- Double-click paste works **only in text fields** (UI Automation checks that the focused element
+  is an editable `Edit` or editable `Document`, not a password field). Anywhere else a double-click
+  does nothing.
+- Text is first read via **UI Automation** (without touching the clipboard or the selection).
+  If an application does not support UIA, the **"Ctrl+C fallback"** is used: the app sends `Ctrl+C`
+  to the active window, reads the clipboard and restores the previous text if copying failed.
+  It is meant for Qt apps, legacy controls, terminals, etc., which do not expose their selection
+  through UIA. Drawbacks: the clipboard is temporarily overwritten and the keystroke may be
+  intercepted by the target app. If the primary method works in all your apps, you can turn it off.
+- All heavy work (UI Automation, clipboard, `SendKeys`) runs on a separate STA thread, so dragging
+  and releasing the mouse never stutters.
+
+### Tray menu
+
+- **Enabled / Disabled** — also toggled by double-clicking the tray icon;
+- **Pause** — 1, 5 or 15 minutes; the remaining time is shown in the icon tooltip;
+- **Paste on double-click** — enabled by default;
+- **Ctrl+C fallback** — disabled by default (enable it only if an app does not expose its selection via UIA);
+- **Add to startup** — writes `CoPasTa` to `HKCU\Software\Microsoft\Windows\CurrentVersion\Run`;
+- **Exit**.
+
+If double-click paste does not work, enable **"Diagnostic log"** (or run `CoPasTa.exe --log`)
+and check `%TEMP%\CoPasTa.log` — it shows whether the click was recognized, which element was
+focused and whether `Ctrl+V` was sent. Clipboard contents are never logged.
+
+The app shows no windows, sends nothing over the network and keeps no history.
+
+### Build
+
+You need the [.NET 8 SDK](https://dotnet.microsoft.com/download/dotnet/8.0).
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\build.ps1
+```
+
+or manually:
+
+```powershell
+dotnet publish .\CoPasTa.csproj -c Release -r win-x64 --self-contained false `
+  -p:PublishSingleFile=true -p:DebugType=None -p:DebugSymbols=false `
+  -o .\publish\win-x64
+```
+
+The result is `publish\win-x64\CoPasTa.exe`.
+
+> The framework-dependent build requires the **.NET 8 Desktop Runtime** on the target PC.
+> For a fully self-contained `.exe`, replace `--self-contained false` with `--self-contained true`.
+
+### Removing from startup
+
+Uncheck the option in the tray menu, or delete the `CoPasTa` value from
+`HKCU\Software\Microsoft\Windows\CurrentVersion\Run`.
+
+### Files
+
+| File | Purpose |
+| --- | --- |
+| `Program.cs` | Entry point (STA, no window) |
+| `TrayContext.cs` | Tray icon, menu, mouse hook, deferred copy/paste, pause, startup |
+| `ClipboardWorker.cs` | Dedicated STA thread for clipboard / UIA / SendKeys |
+| `SelectionReader.cs` | Reading the selection via UIA + Ctrl+C fallback |
+| `NativeMethods.cs` | Win32 P/Invoke |
+| `IconFactory.cs` | Tray icon drawn in code |
+| `app.ico` | Executable icon (wired up via `ApplicationIcon`) |
+| `DebugLog.cs` | Optional diagnostic log (`%TEMP%\CoPasTa.log`) |
+| `CoPasTa.csproj` | .NET 8 / WinForms project |
+| `build.ps1` | One-file exe build script |
+| `LICENSE` | MIT license © 2026 Yan Chernyavsky |
+
+### License
+
+[MIT](LICENSE) — free to use, modify and redistribute, including in commercial projects,
+provided the copyright notice is preserved.
