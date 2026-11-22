@@ -80,3 +80,9 @@ dotnet publish .\CoPasTa.csproj -c Release -r win-x64 --self-contained false `
 | `DebugLog.cs` | Необязательный лог диагностики (`%TEMP%\CoPasTa.log`) |
 | `CoPasTa.csproj` | Проект .NET 8 / WinForms |
 | `build.ps1` | Сборка one-file exe |
+| `LICENSE` | Лицензия MIT © 2026 Yan Chernyavsky |
+
+## Лицензия
+
+[MIT](LICENSE) — можно использовать, изменять и распространять, в том числе в коммерческих
+проектах, при сохранении уведомления об авторстве.
