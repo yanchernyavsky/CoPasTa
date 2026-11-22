@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <OutputType>WinExe</OutputType>
+    <TargetFramework>net8.0-windows</TargetFramework>
+    <UseWindowsForms>true</UseWindowsForms>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>disable</ImplicitUsings>
+    <AssemblyName>CoPasTa</AssemblyName>
+    <RootNamespace>CoPasTa</RootNamespace>
+    <Version>1.0.0</Version>
+    <Authors>CoPasTa</Authors>
+    <Description>Копирование выделенного текста и вставка по двойному щелчку.</Description>
+    <ApplicationIcon>app.ico</ApplicationIcon>
+  </PropertyGroup>
+
+  <!-- UIAutomationClient / UIAutomationTypes поставляются с Windows Desktop (WPF) -->
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.WindowsDesktop.App.WPF" />
+  </ItemGroup>
+
+</Project>
