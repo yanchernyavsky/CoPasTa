@@ -171,6 +171,10 @@ internal sealed class TrayContext : ApplicationContext
                     {
                         CopySelectionOnce();
                     }
+                    catch (Exception ex)
+                    {
+                        DebugLog.Write($"copy: unexpected error {ex.GetType().Name}");
+                    }
                     finally
                     {
                         System.Threading.Interlocked.Exchange(ref _copyQueued, 0);
@@ -193,6 +197,10 @@ internal sealed class TrayContext : ApplicationContext
                         try
                         {
                             PasteOnce();
+                        }
+                        catch (Exception ex)
+                        {
+                            DebugLog.Write($"paste: unexpected error {ex.GetType().Name}");
                         }
                         finally
                         {

@@ -8,8 +8,11 @@
     <ImplicitUsings>disable</ImplicitUsings>
     <AssemblyName>CoPasTa</AssemblyName>
     <RootNamespace>CoPasTa</RootNamespace>
-    <Version>1.0.0</Version>
-    <Authors>CoPasTa</Authors>
+    <Version>1.0.1</Version>
+    <FileVersion>1.0.1.0</FileVersion>
+    <Product>CoPasTa</Product>
+    <Copyright>Copyright (c) 2026 Yan Chernyavsky</Copyright>
+    <Authors>Yan Chernyavsky</Authors>
     <Description>Копирование выделенного текста и вставка по двойному щелчку.</Description>
     <ApplicationIcon>app.ico</ApplicationIcon>
   </PropertyGroup>

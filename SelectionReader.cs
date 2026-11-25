@@ -123,8 +123,8 @@ internal static class SelectionReader
                 Thread.Sleep(10);
             }
 
-            if (text is null)
-                text = previous; // скопировали тот же самый текст или Ctrl+C ничего не изменил
+            // Если буфер не изменился, считаем попытку неудачной: иначе в _lastCopied
+            // попало бы старое содержимое буфера, не имеющее отношения к выделению.
         }
         catch
         {

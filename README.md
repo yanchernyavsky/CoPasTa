@@ -65,10 +65,12 @@ dotnet publish .\CoPasTa.csproj -c Release -r win-x64 --self-contained false `
   -o .\publish\win-x64
 ```
 
-Готовый файл: `publish\win-x64\CoPasTa.exe`.
+`build.ps1` собирает два варианта:
 
-> Для framework-dependent сборки на целевом ПК нужен **.NET 8 Desktop Runtime**.
-> Для полностью автономного `.exe` замените `--self-contained false` на `--self-contained true`.
+- `publish\win-x64\CoPasTa.exe` — компактный, требует **.NET 8 Desktop Runtime**;
+- `publish\win-x64-portable\CoPasTa.exe` — полностью автономный, работает без установленного .NET (больше по размеру).
+
+В релизе доступны оба файла.
 
 ### Удаление автозагрузки
 
@@ -155,10 +157,12 @@ dotnet publish .\CoPasTa.csproj -c Release -r win-x64 --self-contained false `
   -o .\publish\win-x64
 ```
 
-The result is `publish\win-x64\CoPasTa.exe`.
+`build.ps1` produces two variants:
 
-> The framework-dependent build requires the **.NET 8 Desktop Runtime** on the target PC.
-> For a fully self-contained `.exe`, replace `--self-contained false` with `--self-contained true`.
+- `publish\win-x64\CoPasTa.exe` — compact, requires the **.NET 8 Desktop Runtime**;
+- `publish\win-x64-portable\CoPasTa.exe` — fully self-contained, needs no installed .NET (larger).
+
+Both files are attached to the GitHub release.
 
 ### Removing from startup
 
